@@ -1,7 +1,5 @@
 package com.example.demo.admin.service;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -45,29 +43,23 @@ public class AnalyticsService {
     }
 
     public List<Long> getVisitorCount(String startDate, String endDate) throws IOException {
-        // 방문자 수 데이터를 가져오기 위한 Metrics를 설정
         Metric sessions = new Metric().setExpression("ga:sessions").setAlias("sessions");
         List<Metric> metrics = Arrays.asList(sessions);
 
-        // 데이터의 기간(DateRange)을 설정
         DateRange dateRange = new DateRange();
         dateRange.setStartDate(startDate);
         dateRange.setEndDate(endDate);
 
-        // 데이터를 요청하기 위한 ReportRequest 객체를 생성
         ReportRequest reportRequest = new ReportRequest().setViewId(VIEW_ID).setDateRanges(Collections.singletonList(dateRange)).setMetrics(metrics);
 
-        // ReportRequest 객체를 요청하기 위한 GetReportsRequest 객체를 생성
         GetReportsRequest getReport = new GetReportsRequest().setReportRequests(Collections.singletonList(reportRequest));
 
-        // GetReportsRequest 객체를 서버로 요청하고 결과값 반환
         GetReportsResponse response = analyticsReporting.reports().batchGet(getReport).execute();
 
-        // 결과값에서 Metric 값을 가져와서 반환
         List<Report> reportList = response.getReports();
         List<Long> visitorCountList = new ArrayList<>();
         for (Report report : reportList) {
-            if (report.getData() != null && report.getData().getRows() != null && !report.getData().getRows().isEmpty()) {
+            if (report.getData() != null && report.getData().getRows() != null) {
                 List<MetricHeaderEntry> metricHeaderEntries = report.getColumnHeader().getMetricHeader().getMetricHeaderEntries();
                 for (MetricHeaderEntry metricHeaderEntry : metricHeaderEntries) {
                     String metricName = metricHeaderEntry.getName();

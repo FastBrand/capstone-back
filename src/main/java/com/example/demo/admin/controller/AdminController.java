@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -39,6 +41,10 @@ public class AdminController {
 
     @GetMapping("/week")
     public List<Long> getVisitor() throws GeneralSecurityException, IOException {
-        return analyticsService.getVisitorCount("7DaysAgo", "today");
+        LocalDate today = LocalDate.now();
+        LocalDate lastWeek = today.minusWeeks(1);
+        String startDate = lastWeek.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String endDate = today.plusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return analyticsService.getVisitorCount(startDate, endDate);
     }
 }
