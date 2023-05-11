@@ -2,17 +2,23 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/1918/fastBrand
+    destination: /home/ec2-user/brandnew
 
   - permissions:
-      object: /home/1918/fastBrand
+      object: /
       pattern: "**"
-      owner: 1918
-      group: 1918
+      owner: ec2-user
+      group: ec2-user
       mode: 755
 
   - hooks:
       ApplicationStart:
-        - location: deploy.sh
-          timeout: 60
-          runas: root
+        - location: scripts/run_new_was.sh
+          timeout: 180
+          runas: ec2-user
+        - location: scripts/health_check.sh
+          timeout: 180
+          runas: ec2-user
+        - location: scripts/switch.sh
+          timeout: 180
+          runas: ec2-user
