@@ -37,7 +37,7 @@ public class ImageDto {//implements Serializable {
             return URLEncoder.encode(imageURL+"/"+uuid+"_"+originalName,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            return "";
         }
-        return "";
     }
 }

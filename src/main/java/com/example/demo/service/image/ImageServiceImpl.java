@@ -48,37 +48,40 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<ImageDto> uploadImage(MultipartFile[] uploadFiles) { //throws Exception {
-        List<ImageDto> resultDtoList = new ArrayList();
-        for (MultipartFile uploadFile: uploadFiles) {
-            if (uploadFile.isEmpty()) {
-                return resultDtoList;
-            }
+        List<ImageDto> resultDtoList = new ArrayList<>();
+        if (uploadFiles == null) {
+            return resultDtoList;
+        }
 
-            String originalName = StringUtils.cleanPath(uploadFile.getOriginalFilename());
-            String uuid = UUID.randomUUID().toString();
-            String fileExtension = originalName.substring(originalName.lastIndexOf("."));
-            String fileName = uuid + "_" + originalName.replace(fileExtension, "") + fileExtension;
+        for (MultipartFile uploadFile: uploadFiles) {
+            if (!uploadFile.isEmpty()) {
+                String originalName = StringUtils.cleanPath(uploadFile.getOriginalFilename());
+                String uuid = UUID.randomUUID().toString();
+                String fileExtension = originalName.substring(originalName.lastIndexOf("."));
+                String fileName = uuid + "_" + originalName.replace(fileExtension, "") + fileExtension;
             /* SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
             String currentDate = simpleDateFormat.format(new Date());*/
 
-            String filePath = uploadDir + fileName;
-            //resultDtoList.add(new ImageDto(fileName, uuid, savePath));
+                String filePath = uploadDir + fileName;
 
-            try {
-                storeFile(uploadFile, filePath);
-            } catch (IOException e) {
-                //e.printStackTrace();
-                return resultDtoList;
+                try {
+                    storeFile(uploadFile, filePath);
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                    return resultDtoList;
+                }
+
+                ImageDto imageDto = ImageDto.builder()
+                        .originalName(originalName)
+                        .storedName(fileName)
+                        .uuid(uuid)
+                        .imageURL(uploadDir)
+                        .build();
+                Image image = Image.createImage(imageDto);
+                imageRepository.save(image);
+
+                resultDtoList.add(imageDto);
             }
-
-            ImageDto imageDto = new ImageDto();
-            imageDto.setOriginalName(originalName);
-            imageDto.setStoredName(fileName);
-            imageDto.setUuid(uuid);
-            imageDto.setImageURL(uploadDir);
-            Image image = Image.createImage(imageDto);
-
-            resultDtoList.add(imageDto);
         }
         return resultDtoList;
     }
@@ -92,4 +95,6 @@ public class ImageServiceImpl implements ImageService {
         Path storedFilePath = uploadPath.resolve(filePath);
         file.transferTo(storedFilePath.toFile());
     }
+
+
 }
