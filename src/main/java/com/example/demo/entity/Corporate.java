@@ -59,15 +59,12 @@ public class Corporate {
     private String seal;
     @Column
     @Size(max=128)
-    @NotNull
     private String address;
     @Column
     @Size(max=128)
-    @NotNull
     private String detail;
     @Column
     @Size(max=64)
-    @NotNull
     private String zipcode;
     @Column
     @Size(max=16)
