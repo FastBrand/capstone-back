@@ -31,8 +31,8 @@ public class RegisterController {
         return ResponseEntity.status(HttpStatus.OK).body(infoDto);
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> handleFileUpload(@PathVariable Long id, @RequestPart MultipartFile file) throws IOException {
+    @PostMapping("/upload/{id}")
+    public ResponseEntity<String> handleFileUpload(@PathVariable Long id, @RequestPart("file") MultipartFile file) throws IOException {
         return ResponseEntity.status(HttpStatus.OK).body(fileService.uploadFile(id, file));
     }
 }
