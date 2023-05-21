@@ -55,6 +55,7 @@ public class ImageServiceImpl implements ImageService {
 
         for (MultipartFile uploadFile: uploadFiles) {
             if (!uploadFile.isEmpty()) {
+                long fileSize = uploadFile.getSize();
                 String originalName = StringUtils.cleanPath(uploadFile.getOriginalFilename());
                 String uuid = UUID.randomUUID().toString();
                 String fileExtension = originalName.substring(originalName.lastIndexOf("."));
@@ -62,7 +63,7 @@ public class ImageServiceImpl implements ImageService {
             /* SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
             String currentDate = simpleDateFormat.format(new Date());*/
 
-                String filePath = uploadDir + fileName;
+                String filePath = uploadDir + "/" + fileName;
 
                 try {
                     storeFile(uploadFile, filePath);
@@ -76,6 +77,7 @@ public class ImageServiceImpl implements ImageService {
                         .storedName(fileName)
                         .uuid(uuid)
                         .imageURL(uploadDir)
+                        .fileSize(fileSize)
                         .build();
                 Image image = Image.createImage(imageDto);
                 imageRepository.save(image);
