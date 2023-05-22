@@ -24,7 +24,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public String uploadFile(Long id, MultipartFile file) throws IOException {
 
-        String originalName = file.getOriginalFilename();
+        String originalName = "img/" + file.getOriginalFilename();
         long size = file.getSize();
 
         ObjectMetadata objectMetaData = new ObjectMetadata();
