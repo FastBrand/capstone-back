@@ -10,6 +10,6 @@ public interface ImageService {
 
     public ImageDto getImage(Long id);
 
-    List<ImageDto> uploadImage(MultipartFile[] uploadFiles);
+    List<ImageDto> uploadImage(MultipartFile[] uploadFiles, String fileType);
 
 }
