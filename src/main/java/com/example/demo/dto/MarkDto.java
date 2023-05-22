@@ -19,6 +19,7 @@ public class MarkDto {
     private String madrid;
     private String direct;
     private String status;
+    private String total;
 
 
     public static MarkDto createMarkDto(Mark mark) {
@@ -34,6 +35,7 @@ public class MarkDto {
                 .madrid(mark.getMadrid())
                 .direct(mark.getDirect())
                 .status(mark.getStatus())
+                .total(mark.getTotal())
                 .build();
     }
 

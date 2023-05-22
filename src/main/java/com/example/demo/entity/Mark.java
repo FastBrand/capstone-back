@@ -56,6 +56,9 @@ public class Mark {
     @Column
     @Size(max=64)
     private String status;
+    @Column
+    @Size(max=256)
+    private String total;
 
 
     @OneToMany(mappedBy = "mark", cascade = CascadeType.ALL)
@@ -74,6 +77,7 @@ public class Mark {
                 .madrid(dto.getMadrid())
                 .direct(dto.getDirect())
                 .status(dto.getStatus())
+                .total(dto.getTotal())
                 .build();
     }
 
@@ -94,5 +98,7 @@ public class Mark {
             this.country = mark.getCountry();
         if(mark.getStatus() != null)
             this.status = mark.getStatus();
+        if(mark.getTotal() != null)
+            this.total = mark.getTotal();
     }
 }
