@@ -34,6 +34,10 @@ public class Seal {
     @Column
     private long fileSize;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "corporate_id")
+    private Corporate corporate;
+
     public static Seal createSeal(ImageDto imageDto) {
         return Seal.builder()
                 .id(imageDto.getId())

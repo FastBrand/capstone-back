@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import com.example.demo.dto.ImageDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 //@EqualsAndHashCode
@@ -35,6 +36,10 @@ public class Image {
 
     @Column
     private long fileSize;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mark_id")
+    private Mark mark;
 
     public static Image createImage(ImageDto imageDto) {
         return Image.builder()

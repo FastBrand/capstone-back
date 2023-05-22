@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -53,6 +56,10 @@ public class Mark {
     @Column
     @Size(max=64)
     private String status;
+
+
+    @OneToMany(mappedBy = "mark", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
 
     public static Mark createMark(MarkDto dto) {
         return Mark.builder()
