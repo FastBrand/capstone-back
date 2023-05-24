@@ -56,6 +56,12 @@ public class Mark {
     @Column
     @Size(max=64)
     private String status;
+    @OneToOne(mappedBy = "mark")
+    private Corporate corporate;
+    @OneToOne(mappedBy = "mark")
+    private Personal personal;
+    @OneToOne(mappedBy = "mark")
+    private User user;
     @Column
     @Size(max=256)
     private String total;
