@@ -17,7 +17,6 @@ import java.io.IOException;
 @RequestMapping("/api/register")
 public class RegisterController {
     private final InfoServiceImpl infoService;
-    private final FileServiceImpl fileService;
 
     @PostMapping("/personal")
     public ResponseEntity<InfoDto> createPersonal(@RequestBody InfoDto dto) {
@@ -29,10 +28,5 @@ public class RegisterController {
     public ResponseEntity<InfoDto> createCorporate(@RequestBody InfoDto dto) {
         InfoDto infoDto = infoService.createCorp(dto);
         return ResponseEntity.status(HttpStatus.OK).body(infoDto);
-    }
-
-    @PostMapping("/upload/{id}")
-    public ResponseEntity<String> handleFileUpload(@PathVariable Long id, @RequestPart("file") MultipartFile file) throws IOException {
-        return ResponseEntity.status(HttpStatus.OK).body(fileService.uploadFile(id, file));
     }
 }
