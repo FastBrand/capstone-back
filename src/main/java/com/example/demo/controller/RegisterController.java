@@ -19,18 +19,30 @@ public class RegisterController {
     private final InfoServiceImpl infoService;
     private final ImageServiceImpl imageService;
 
-    @PostMapping("/personal")
+    @PostMapping("/all/personal")
     //public ResponseEntity<InfoDto> createPersonal(@RequestBody InfoDto dto, MultipartFile[] files) {
-    public ResponseEntity<InfoDto> createPersonal(@RequestPart("data") InfoDto dto, @RequestPart("image") MultipartFile[] files) {
+    public ResponseEntity<InfoDto> createAllPersonal(@RequestPart("data") InfoDto dto, @RequestPart("image") MultipartFile[] files) {
         List<ImageDto> imageDtoList = imageService.uploadImage(files, "image");
         InfoDto infoDto = infoService.createPer(dto);
         return ResponseEntity.status(HttpStatus.OK).body(infoDto);
     }
 
-    @PostMapping("/corporate")
-    public ResponseEntity<InfoDto> createCorporate(@RequestPart("data") InfoDto dto, @RequestPart("image") MultipartFile[] images, @RequestPart("seal") MultipartFile[] seals) {
+    @PostMapping("/all/corporate")
+    public ResponseEntity<InfoDto> createAllCorporate(@RequestPart("data") InfoDto dto, @RequestPart("image") MultipartFile[] images, @RequestPart("seal") MultipartFile[] seals) {
         List<ImageDto> imageDtoList = imageService.uploadImage(images, "image");
         List<ImageDto> sealDtoList = imageService.uploadImage(seals, "seal");
+        InfoDto infoDto = infoService.createCorp(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(infoDto);
+    }
+
+    @PostMapping("/personal")
+    public ResponseEntity<InfoDto> createPersonal(@RequestBody InfoDto dto) {
+        InfoDto infoDto = infoService.createPer(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(infoDto);
+    }
+
+    @PostMapping("/corporate")
+    public ResponseEntity<InfoDto> createCorporate(@RequestBody InfoDto dto) {
         InfoDto infoDto = infoService.createCorp(dto);
         return ResponseEntity.status(HttpStatus.OK).body(infoDto);
     }
