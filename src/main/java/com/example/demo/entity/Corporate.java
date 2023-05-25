@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -59,21 +62,20 @@ public class Corporate {
     private String seal;
     @Column
     @Size(max=128)
-    @NotNull
     private String address;
     @Column
     @Size(max=128)
-    @NotNull
     private String detail;
     @Column
     @Size(max=64)
-    @NotNull
     private String zipcode;
     @Column
     @Size(max=16)
     @NotNull
     private String agreement;
 
+    @OneToMany(mappedBy = "corporate", cascade = CascadeType.ALL)
+    private List<Seal> seals = new ArrayList<>();
 
     public static Corporate createCorporate(CorporateDto dto, Mark mark) {
         return Corporate.builder()

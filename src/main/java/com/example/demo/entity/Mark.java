@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -41,12 +44,15 @@ public class Mark {
     private String poc;
     @Column
     @Size(max=256)
+    @NotNull
     private String country;
     @Column
     @Size(max=256)
+    @NotNull
     private String madrid;
     @Column
     @Size(max=256)
+    @NotNull
     private String direct;
     @Column
     @Size(max=64)
@@ -57,6 +63,13 @@ public class Mark {
     private Personal personal;
     @OneToOne(mappedBy = "mark")
     private User user;
+    @Column
+    @Size(max=256)
+    private String total;
+
+
+    @OneToMany(mappedBy = "mark", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
 
     public static Mark createMark(MarkDto dto) {
         return Mark.builder()
@@ -71,6 +84,7 @@ public class Mark {
                 .madrid(dto.getMadrid())
                 .direct(dto.getDirect())
                 .status(dto.getStatus())
+                .total(dto.getTotal())
                 .build();
     }
 
@@ -91,5 +105,7 @@ public class Mark {
             this.country = mark.getCountry();
         if(mark.getStatus() != null)
             this.status = mark.getStatus();
+        if(mark.getTotal() != null)
+            this.total = mark.getTotal();
     }
 }
