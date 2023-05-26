@@ -11,5 +11,5 @@ public interface InfoService {
     InfoDto createCorp(InfoDto dto, MultipartFile[] images, String imageType, MultipartFile[] seals, String sealType);
     InfoDto createPer(InfoDto dto, MultipartFile[] images, String imageType);
     InfoDto update(InfoDto dto);
-    InfoDto inf(Long id);
+    InfoDto _info(Long id);
 }

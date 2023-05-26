@@ -77,7 +77,7 @@ public class InfoServiceImpl implements InfoService{
     }
 
     @Override
-    public InfoDto inf(Long id) {
+    public InfoDto _info(Long id) {
         Mark mark = markService._mark(id);
         CorporateDto corporateDto;
         PersonalDto personalDto;

@@ -3,7 +3,6 @@ package com.example.demo.entity;
 import com.example.demo.dto.ImageDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 //@EqualsAndHashCode
