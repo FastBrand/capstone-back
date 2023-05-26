@@ -57,6 +57,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
                 .withClaim("id", principalDetail.getAdmin().getId())
                 .withClaim("username", principalDetail.getAdmin().getUsername())
+                .withClaim("role", principalDetail.getAdmin().getRole())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
 
