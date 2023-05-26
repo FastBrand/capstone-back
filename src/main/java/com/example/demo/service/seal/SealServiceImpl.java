@@ -90,4 +90,13 @@ public class SealServiceImpl implements SealService {
         }
         return resultDtoList;
     }
+
+    @Override
+    public void deleteSeal(List<Seal> seals) {
+        for(Seal seal : seals) {
+            String key = "seals/" + seal.getOriginalName();
+            uploadService.deleteFile(key);
+            sealRepository.delete(seal);
+        }
+    }
 }

@@ -19,7 +19,6 @@ import java.io.IOException;
 public class EditController {
     private final InfoServiceImpl infoService;
     private final MarkServiceImpl markService;
-    private final UploadServiceImpl fileService;
 
     @PatchMapping("/mark/{id}")
     public ResponseEntity<MarkDto> updateMark(@PathVariable Long id, @RequestBody MarkDto dto) {

@@ -4,7 +4,7 @@ import com.example.demo.dto.ImageDto;
 import com.example.demo.entity.Image;
 import com.example.demo.entity.Mark;
 import com.example.demo.repository.ImageRepository;
-import com.example.demo.service.mark.MarkServiceImpl;
+import com.example.demo.repository.MarkRepository;
 import com.example.demo.service.upload.UploadServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Service
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
-    private final MarkServiceImpl markService;
+    private final MarkRepository markRepository;
     private final UploadServiceImpl uploadService;
     private String uploadDir = System.getProperty("user.dir") + "/Image";
 
@@ -47,7 +47,8 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<ImageDto> getImagesByMarkId(Long mark_id) {
-        Mark mark = markService._mark(mark_id);
+        Mark mark = markRepository.findById(mark_id)
+                .orElseThrow(IllegalArgumentException::new);
         List<Image> images = mark.getImages();
         List<ImageDto> list = new ArrayList<>();
         for(Image image : images) {
@@ -59,7 +60,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public List<ImageDto> uploadImage(Long mark_id, MultipartFile[] uploadFiles, String fileType) { //throws Exception {
         List<ImageDto> resultDtoList = new ArrayList<>();
-        Mark mark = markService._mark(mark_id);
+        Mark mark = markRepository.findById(mark_id)
+                .orElseThrow(IllegalArgumentException::new);
 
         if (uploadFiles == null) {
             return resultDtoList;
@@ -68,7 +70,7 @@ public class ImageServiceImpl implements ImageService {
         for (MultipartFile uploadFile: uploadFiles) {
             if (!uploadFile.isEmpty()) {
                 String fileSize = String.valueOf(uploadFile.getSize());
-                String originalName = StringUtils.cleanPath(Objects.requireNonNull(uploadFile.getOriginalFilename()));
+                String originalName = uploadFile.getOriginalFilename();
                 String uuid = UUID.randomUUID().toString();
                 String fileExtension = originalName.substring(originalName.lastIndexOf("."));
                 String fileName = uuid + "_" + originalName.replace(fileExtension, "") + fileExtension;
@@ -99,6 +101,15 @@ public class ImageServiceImpl implements ImageService {
             }
         }
         return resultDtoList;
+    }
+
+    @Override
+    public void deleteImage(List<Image> images) {
+        for(Image image : images) {
+            String key = "marks/" + image.getOriginalName();
+            uploadService.deleteFile(key);
+            imageRepository.delete(image);
+        }
     }
 
     private void storeFile(MultipartFile file, String filePath) throws IOException {
