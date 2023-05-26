@@ -1,11 +1,15 @@
 package com.example.demo.service.image;
 
 import com.example.demo.dto.ImageDto;
+import com.example.demo.dto.InfoDto;
 import com.example.demo.dto.MarkDto;
 import com.example.demo.entity.Image;
+import com.example.demo.entity.Mark;
 import com.example.demo.entity.Seal;
 import com.example.demo.repository.ImageRepository;
+import com.example.demo.repository.MarkRepository;
 import com.example.demo.repository.SealRepository;
+import com.example.demo.service.File.FileServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,6 +37,8 @@ import java.util.stream.Collectors;
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
     private final SealRepository sealRepository;
+    private final MarkRepository markRepository;
+    private final FileServiceImpl fileService;
     private String uploadDir = System.getProperty("user.dir") + "/Image";
 
     @Override
@@ -49,8 +55,16 @@ public class ImageServiceImpl implements ImageService {
         return ImageDto.createImageDto(image);
     }
 
+    public List<Image> getImagesByMarkId(Long markId) {
+        Mark mark = markRepository.findById(markId)
+                .orElseThrow(() -> new IllegalArgumentException("Mark not found with id: " + markId));
+
+        List<Image> images = mark.getImages();
+        return images;
+    }
+
     @Override
-    public List<ImageDto> uploadImage(MultipartFile[] uploadFiles, String fileType) { //throws Exception {
+    public List<ImageDto> uploadImage(InfoDto dto, MultipartFile[] uploadFiles, String fileType) { //throws Exception {
         List<ImageDto> resultDtoList = new ArrayList<>();
         if (uploadFiles == null) {
             return resultDtoList;
@@ -66,33 +80,37 @@ public class ImageServiceImpl implements ImageService {
             /* SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
             String currentDate = simpleDateFormat.format(new Date());*/
 
-                String filePath = uploadDir + "/" + fileName;
+                //String filePath = uploadDir + "/" + fileName;
+                Long markId = dto.getMark().getId();
 
                 try {
-                    storeFile(uploadFile, filePath);
+                    String filePath = fileService.uploadFile(markId, uploadFile);
+
+                    ImageDto imageDto = ImageDto.builder()
+                            .originalName(originalName)
+                            .storedName(fileName)
+                            .uuid(uuid)
+                            .imageURL(filePath)
+                            .fileSize(fileSize)
+                            .build();
+
+                    Mark mark = Mark.createMark(dto.getMark());
+
+                    if (fileType.equals("image")) {
+                        Image image = Image.createImage(imageDto);
+
+                        imageRepository.save(image);
+                    }
+                    else if (fileType.equals("seal")) {
+                        Seal seal = Seal.createSeal(imageDto);
+                        sealRepository.save(seal);
+                    }
+
+                    resultDtoList.add(imageDto);
                 } catch (IOException e) {
                     //e.printStackTrace();
                     return resultDtoList;
                 }
-
-                ImageDto imageDto = ImageDto.builder()
-                        .originalName(originalName)
-                        .storedName(fileName)
-                        .uuid(uuid)
-                        .imageURL(uploadDir)
-                        .fileSize(fileSize)
-                        .build();
-
-                if (fileType.equals("image")) {
-                    Image image = Image.createImage(imageDto);
-                    imageRepository.save(image);
-                }
-                else if (fileType.equals("seal")) {
-                    Seal seal = Seal.createSeal(imageDto);
-                    sealRepository.save(seal);
-                }
-
-                resultDtoList.add(imageDto);
             }
         }
         return resultDtoList;

@@ -22,15 +22,15 @@ public class RegisterController {
     @PostMapping("/all/personal")
     //public ResponseEntity<InfoDto> createPersonal(@RequestBody InfoDto dto, MultipartFile[] files) {
     public ResponseEntity<InfoDto> createAllPersonal(@RequestPart("data") InfoDto dto, @RequestPart("image") MultipartFile[] files) {
-        List<ImageDto> imageDtoList = imageService.uploadImage(files, "image");
+        List<ImageDto> imageDtoList = imageService.uploadImage(dto, files, "image");
         InfoDto infoDto = infoService.createPer(dto);
         return ResponseEntity.status(HttpStatus.OK).body(infoDto);
     }
 
     @PostMapping("/all/corporate")
     public ResponseEntity<InfoDto> createAllCorporate(@RequestPart("data") InfoDto dto, @RequestPart("image") MultipartFile[] images, @RequestPart("seal") MultipartFile[] seals) {
-        List<ImageDto> imageDtoList = imageService.uploadImage(images, "image");
-        List<ImageDto> sealDtoList = imageService.uploadImage(seals, "seal");
+        List<ImageDto> imageDtoList = imageService.uploadImage(dto, images, "image");
+        List<ImageDto> sealDtoList = imageService.uploadImage(dto, seals, "seal");
         InfoDto infoDto = infoService.createCorp(dto);
         return ResponseEntity.status(HttpStatus.OK).body(infoDto);
     }

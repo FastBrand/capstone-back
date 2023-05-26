@@ -27,6 +27,7 @@ public class Image {
     private String storedName;
 
     @Column
+    @Size(max=256) 
     @NotNull
     private String imageURL;
 

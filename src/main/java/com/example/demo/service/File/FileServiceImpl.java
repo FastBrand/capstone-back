@@ -38,9 +38,9 @@ public class FileServiceImpl implements FileService {
 
         String imageUrl = amazonS3.getUrl(S3Bucket, originalName).toString();
 
-        Mark mark = markRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("error"));
+        /*Mark mark = markRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("error"));
         mark.setImage(imageUrl);
-        markRepository.save(mark);
+        markRepository.save(mark);*/
 
         return imageUrl;
     }

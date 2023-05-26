@@ -26,10 +26,10 @@ public class ImageController {
 
     private final ImageServiceImpl imageService;
 
-    @PostMapping("/upload")
+    /*@PostMapping("/upload")
     public ResponseEntity<List<ImageDto>> uploadImage(@RequestBody MultipartFile[] uploadFiles) throws IOException {
         List<ImageDto> imageDtoList = imageService.uploadImage(uploadFiles, "image");
         return ResponseEntity.status(HttpStatus.OK).body(imageDtoList);
-    }
+    }*/
 
 }

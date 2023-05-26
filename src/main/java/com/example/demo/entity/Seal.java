@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import com.example.demo.dto.ImageDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @AllArgsConstructor
@@ -24,6 +25,7 @@ public class Seal {
     private String storedName;
 
     @Column
+    @Size(max=256)
     @NotNull
     private String imageURL;
 
