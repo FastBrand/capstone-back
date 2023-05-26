@@ -1,33 +1,24 @@
 package com.example.demo.service.image;
 
 import com.example.demo.dto.ImageDto;
-import com.example.demo.dto.InfoDto;
-import com.example.demo.dto.MarkDto;
 import com.example.demo.entity.Image;
 import com.example.demo.entity.Mark;
-import com.example.demo.entity.Seal;
 import com.example.demo.repository.ImageRepository;
-import com.example.demo.repository.MarkRepository;
-import com.example.demo.repository.SealRepository;
-import com.example.demo.service.File.FileServiceImpl;
+import com.example.demo.service.mark.MarkServiceImpl;
+import com.example.demo.service.upload.UploadServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -36,9 +27,8 @@ import java.util.stream.Collectors;
 @Service
 public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
-    private final SealRepository sealRepository;
-    private final MarkRepository markRepository;
-    private final FileServiceImpl fileService;
+    private final MarkServiceImpl markService;
+    private final UploadServiceImpl uploadService;
     private String uploadDir = System.getProperty("user.dir") + "/Image";
 
     @Override
@@ -55,25 +45,30 @@ public class ImageServiceImpl implements ImageService {
         return ImageDto.createImageDto(image);
     }
 
-    public List<Image> getImagesByMarkId(Long markId) {
-        Mark mark = markRepository.findById(markId)
-                .orElseThrow(() -> new IllegalArgumentException("Mark not found with id: " + markId));
-
+    @Override
+    public List<ImageDto> getImagesByMarkId(Long mark_id) {
+        Mark mark = markService._mark(mark_id);
         List<Image> images = mark.getImages();
-        return images;
+        List<ImageDto> list = new ArrayList<>();
+        for(Image image : images) {
+            list.add(ImageDto.createImageDto(image));
+        }
+        return list;
     }
 
     @Override
-    public List<ImageDto> uploadImage(InfoDto dto, MultipartFile[] uploadFiles, String fileType) { //throws Exception {
+    public List<ImageDto> uploadImage(Long mark_id, MultipartFile[] uploadFiles, String fileType) { //throws Exception {
         List<ImageDto> resultDtoList = new ArrayList<>();
+        Mark mark = markService._mark(mark_id);
+
         if (uploadFiles == null) {
             return resultDtoList;
         }
 
         for (MultipartFile uploadFile: uploadFiles) {
             if (!uploadFile.isEmpty()) {
-                long fileSize = uploadFile.getSize();
-                String originalName = StringUtils.cleanPath(uploadFile.getOriginalFilename());
+                String fileSize = String.valueOf(uploadFile.getSize());
+                String originalName = StringUtils.cleanPath(Objects.requireNonNull(uploadFile.getOriginalFilename()));
                 String uuid = UUID.randomUUID().toString();
                 String fileExtension = originalName.substring(originalName.lastIndexOf("."));
                 String fileName = uuid + "_" + originalName.replace(fileExtension, "") + fileExtension;
@@ -81,34 +76,24 @@ public class ImageServiceImpl implements ImageService {
             String currentDate = simpleDateFormat.format(new Date());*/
 
                 //String filePath = uploadDir + "/" + fileName;
-                Long markId = dto.getMark().getId();
 
                 try {
-                    String filePath = fileService.uploadFile(markId, uploadFile);
+                    String filePath = uploadService.upload(mark_id, uploadFile, fileType);
 
                     ImageDto imageDto = ImageDto.builder()
                             .originalName(originalName)
                             .storedName(fileName)
                             .uuid(uuid)
-                            .imageURL(filePath)
+                            .url(filePath)
                             .fileSize(fileSize)
+                            .mark_id(mark_id)
                             .build();
 
-                    Mark mark = Mark.createMark(dto.getMark());
+                    Image image = Image.createImage(imageDto, mark);
+                    Image created = imageRepository.save(image);
+                    resultDtoList.add(ImageDto.createImageDto(created));
 
-                    if (fileType.equals("image")) {
-                        Image image = Image.createImage(imageDto);
-
-                        imageRepository.save(image);
-                    }
-                    else if (fileType.equals("seal")) {
-                        Seal seal = Seal.createSeal(imageDto);
-                        sealRepository.save(seal);
-                    }
-
-                    resultDtoList.add(imageDto);
                 } catch (IOException e) {
-                    //e.printStackTrace();
                     return resultDtoList;
                 }
             }

@@ -29,9 +29,6 @@ public class Mark {
     private String description;
     @Column
     @Size(max=256)
-    private String image;
-    @Column
-    @Size(max=256)
     @NotNull
     private String sector;
     @Column
@@ -63,11 +60,6 @@ public class Mark {
     private Personal personal;
     @OneToOne(mappedBy = "mark")
     private User user;
-    @Column
-    @Size(max=256)
-    private String total;
-
-
     @OneToMany(mappedBy = "mark", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
@@ -76,7 +68,6 @@ public class Mark {
                 .id(dto.getId())
                 .brand_name(dto.getBrand_name())
                 .description(dto.getDescription())
-                .image(dto.getImage())
                 .sector(dto.getSector())
                 .type(dto.getType())
                 .poc(dto.getPoc())
@@ -84,7 +75,6 @@ public class Mark {
                 .madrid(dto.getMadrid())
                 .direct(dto.getDirect())
                 .status(dto.getStatus())
-                .total(dto.getTotal())
                 .build();
     }
 
@@ -93,8 +83,6 @@ public class Mark {
             this.brand_name = mark.getBrand_name();
         if(mark.getDescription() != null)
             this.description = mark.getDescription();
-        if(mark.getImage() != null)
-            this.image = mark.getImage();
         if(mark.getSector() != null)
             this.sector = mark.getSector();
         if(mark.getType() != null)
@@ -105,7 +93,5 @@ public class Mark {
             this.country = mark.getCountry();
         if(mark.getStatus() != null)
             this.status = mark.getStatus();
-        if(mark.getTotal() != null)
-            this.total = mark.getTotal();
     }
 }

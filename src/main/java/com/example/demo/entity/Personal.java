@@ -17,7 +17,7 @@ public class Personal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mid")
+    @JoinColumn(name = "mark_id")
     private Mark mark;
     @Column
     @Size(max=64)

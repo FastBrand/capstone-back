@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.Image;
+import com.example.demo.entity.Seal;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -14,24 +15,24 @@ import java.net.URLEncoder;
 @Getter
 @Setter
 @Builder
-public class ImageDto {
+public class SealDto {
     private Long id;
     private String originalName;
     private String storedName;
     private String url;
     private String uuid;
     private String fileSize;
-    private Long mark_id;
+    private Long corp_id;
 
-    public static ImageDto createImageDto(Image image) {
-        return ImageDto.builder()
-                .id(image.getId())
-                .originalName(image.getOriginalName())
-                .storedName(image.getStoredName())
-                .url(image.getUrl())
-                .uuid(image.getUuid())
-                .fileSize(image.getFileSize())
-                .mark_id(image.getMark().getId())
+    public static SealDto createSealDto(Seal seal) {
+        return SealDto.builder()
+                .id(seal.getId())
+                .originalName(seal.getOriginalName())
+                .storedName(seal.getStoredName())
+                .url(seal.getUrl())
+                .uuid(seal.getUuid())
+                .fileSize(seal.getFileSize())
+                .corp_id(seal.getCorporate().getId())
                 .build();
     }
 

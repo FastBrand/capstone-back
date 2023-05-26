@@ -20,7 +20,7 @@ public class Corporate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mid")
+    @JoinColumn(name = "mark_id")
     private Mark mark;
     @Column
     @Size(max=64)
@@ -73,7 +73,6 @@ public class Corporate {
     @Size(max=16)
     @NotNull
     private String agreement;
-
     @OneToMany(mappedBy = "corporate", cascade = CascadeType.ALL)
     private List<Seal> seals = new ArrayList<>();
 

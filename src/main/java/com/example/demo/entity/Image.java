@@ -16,40 +16,34 @@ import lombok.*;
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    private Long id;
     @Column
     @NotNull
     private String originalName;
-
     @Column
     @NotNull
     private String storedName;
-
     @Column
-    @Size(max=256) 
     @NotNull
-    private String imageURL;
-
+    private String url;
     @Column
     @NotNull
     private String uuid;
-
     @Column
-    private long fileSize;
-
+    private String fileSize;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mark_id")
     private Mark mark;
 
-    public static Image createImage(ImageDto imageDto) {
+    public static Image createImage(ImageDto imageDto, Mark mark) {
         return Image.builder()
                 .id(imageDto.getId())
                 .originalName(imageDto.getOriginalName())
                 .storedName(imageDto.getStoredName())
-                .imageURL(imageDto.getImageURL())
+                .url(imageDto.getUrl())
                 .uuid(imageDto.getUuid())
                 .fileSize(imageDto.getFileSize())
+                .mark(mark)
                 .build();
     }
 }

@@ -40,6 +40,11 @@ public class MarkServiceImpl implements MarkService {
         return MarkDto.createMarkDto(mark);
     }
 
+    public Mark _mark(Long id) {
+        return markRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("error"));
+    }
+
     @Override
     @Transactional
     public MarkDto create(MarkDto dto) {

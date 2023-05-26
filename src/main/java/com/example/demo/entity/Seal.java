@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.dto.ImageDto;
+import com.example.demo.dto.SealDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,40 +15,34 @@ import lombok.*;
 public class Seal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    private Long id;
     @Column
     @NotNull
     private String originalName;
-
     @Column
     @NotNull
     private String storedName;
-
     @Column
-    @Size(max=256)
     @NotNull
-    private String imageURL;
-
+    private String url;
     @Column
     @NotNull
     private String uuid;
-
     @Column
-    private long fileSize;
-
+    private String fileSize;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "corporate_id")
+    @JoinColumn(name = "corp_id")
     private Corporate corporate;
 
-    public static Seal createSeal(ImageDto imageDto) {
+    public static Seal createSeal(SealDto sealDto, Corporate corporate) {
         return Seal.builder()
-                .id(imageDto.getId())
-                .originalName(imageDto.getOriginalName())
-                .storedName(imageDto.getStoredName())
-                .imageURL(imageDto.getImageURL())
-                .uuid(imageDto.getUuid())
-                .fileSize(imageDto.getFileSize())
+                .id(sealDto.getId())
+                .originalName(sealDto.getOriginalName())
+                .storedName(sealDto.getStoredName())
+                .url(sealDto.getUrl())
+                .uuid(sealDto.getUuid())
+                .fileSize(sealDto.getFileSize())
+                .corporate(corporate)
                 .build();
     }
 }
