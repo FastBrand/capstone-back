@@ -19,7 +19,6 @@ public class CorporateDto {
     private String corporateMobile;
     private String corporatePhone;
     private String corporateEmail;
-    private String seal;
     private String address;
     private String detail;
     private String zipcode;
@@ -38,7 +37,6 @@ public class CorporateDto {
                 .corporateMobile(corporate.getCorporateMobile())
                 .corporatePhone(corporate.getCorporatePhone())
                 .corporateEmail(corporate.getCorporateEmail())
-                .seal(corporate.getSeal())
                 .address(corporate.getAddress())
                 .detail(corporate.getDetail())
                 .zipcode(corporate.getZipcode())

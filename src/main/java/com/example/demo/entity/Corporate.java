@@ -58,9 +58,6 @@ public class Corporate {
     @Email
     private String corporateEmail;
     @Column
-    @Size(max=256)
-    private String seal;
-    @Column
     @Size(max=128)
     private String address;
     @Column
@@ -89,7 +86,6 @@ public class Corporate {
                 .corporateMobile(dto.getCorporateMobile())
                 .corporatePhone(dto.getCorporatePhone())
                 .corporateEmail(dto.getCorporateEmail())
-                .seal(dto.getSeal())
                 .address(dto.getAddress())
                 .detail(dto.getDetail())
                 .zipcode(dto.getZipcode())
@@ -117,8 +113,6 @@ public class Corporate {
             this.corporatePhone = corporate.getCorporatePhone();
         if(corporate.getCorporateEmail() != null)
             this.corporateEmail = corporate.getCorporateEmail();
-        if(corporate.getSeal() != null)
-            this.seal = corporate.getSeal();
         if(corporate.getAddress() != null)
             this.address = corporate.getAddress();
         if(corporate.getDetail() != null)
