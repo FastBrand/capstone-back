@@ -58,9 +58,6 @@ public class Corporate {
     @Email
     private String corporateEmail;
     @Column
-    @Size(max=256)
-    private String seal;
-    @Column
     @Size(max=128)
     private String address;
     @Column
