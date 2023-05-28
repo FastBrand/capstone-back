@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/admin")
+@RequestMapping("/api")
 public class AdminController {
     private final AdminService adminService;
     private final AnalyticsService analyticsService;
@@ -29,13 +29,13 @@ public class AdminController {
         return adminService.managers();
     }
 
-    @PostMapping
+    @PostMapping("/join")
     public ResponseEntity<AdminDto> create(@RequestBody AdminDto dto) {
         adminService.createAdmin(dto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     public ResponseEntity<AdminDto> update(@PathVariable Long id, @RequestBody AdminDto dto) {
         AdminDto adminDto = adminService.updateAdmin(id, dto);
         if(adminDto != null)
@@ -44,7 +44,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<AdminDto> delete(@PathVariable Long id) {
         AdminDto adminDto = adminService.deleteAdmin(id);
         if(adminDto != null)
@@ -59,7 +59,7 @@ public class AdminController {
         return "logout";
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping("/admin/dashboard")
     public List<Long> getVisitor() throws GeneralSecurityException, IOException {
         LocalDate today = LocalDate.now();
         LocalDate lastWeek = today.minusWeeks(1);
