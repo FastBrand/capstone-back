@@ -1,17 +1,18 @@
 package com.example.demo.admin.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.demo.admin.entity.Admin;
+import lombok.*;
 
-import java.time.LocalDateTime;
-
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
+@Data
 @Builder
 public class AdminDto {
     private String username;
     private String password;
+
+    public static AdminDto createAdminDto(Admin admin) {
+        return AdminDto.builder()
+                .username(admin.getUsername())
+                .password(admin.getPassword())
+                .build();
+    }
 }
