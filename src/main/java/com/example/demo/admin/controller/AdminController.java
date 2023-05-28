@@ -53,11 +53,11 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "logout";
-    }
+//    @GetMapping("/admin/logout")
+//    public String logout(HttpSession session) {
+//        session.invalidate();
+//        return "logout";
+//    }
 
     @GetMapping("/admin/dashboard")
     public List<Long> getVisitor() throws GeneralSecurityException, IOException {
