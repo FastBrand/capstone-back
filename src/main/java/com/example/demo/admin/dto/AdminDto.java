@@ -3,7 +3,9 @@ package com.example.demo.admin.dto;
 import com.example.demo.admin.entity.Admin;
 import lombok.*;
 
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Builder
 public class AdminDto {
     private String username;
