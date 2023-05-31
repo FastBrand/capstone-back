@@ -12,7 +12,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://43.202.29.2:3000");
+        config.addAllowedOrigin("http://43.202.29.2:*");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.addExposedHeader("Authorization");
