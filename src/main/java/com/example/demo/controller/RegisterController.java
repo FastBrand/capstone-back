@@ -15,14 +15,14 @@ public class RegisterController {
     private final InfoServiceImpl infoService;
 
     @PostMapping("/personal")
-    public ResponseEntity<InfoDto> createAllPersonal(@RequestPart("data") InfoDto dto, @RequestPart("image") MultipartFile[] images) {
+    public ResponseEntity<InfoDto> createAllPersonal(@RequestPart("data") InfoDto dto, @RequestPart(value = "image", required = false) MultipartFile[] images) {
         InfoDto infoDto = infoService.createPer(dto, images, "image");
         return ResponseEntity.status(HttpStatus.OK).body(infoDto);
     }
 
     @PostMapping("/corporate")
-    public ResponseEntity<InfoDto> createAllCorporate(@RequestPart("data") InfoDto dto, @RequestPart("image") MultipartFile[] images, @RequestPart("seal") MultipartFile[] seals) {
-        InfoDto infoDto = infoService.createCorp(dto, images, "image", seals, "seal");
+    public ResponseEntity<InfoDto> createAllCorporate(@RequestPart("data") InfoDto dto, @RequestPart(value = "image", required = false) MultipartFile[] images, @RequestPart(value = "seal", required = false) MultipartFile[] seals) {
+        InfoDto infoDto = infoService.createCorp(dto, images, "image", seals, "seal");;
         return ResponseEntity.status(HttpStatus.OK).body(infoDto);
     }
 }
