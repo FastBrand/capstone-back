@@ -22,7 +22,7 @@ public class RegisterController {
 
     @PostMapping("/corporate")
     public ResponseEntity<InfoDto> createAllCorporate(@RequestPart("data") InfoDto dto, @RequestPart("image") MultipartFile[] images, @RequestPart("seal") MultipartFile[] seals) {
-        InfoDto infoDto = infoService.createCorp(dto, images, "image", seals, "seal");;
+        InfoDto infoDto = infoService.createCorp(dto, images, "image", seals, "seal");
         return ResponseEntity.status(HttpStatus.OK).body(infoDto);
     }
 }
