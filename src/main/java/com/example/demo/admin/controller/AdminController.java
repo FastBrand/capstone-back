@@ -3,8 +3,6 @@ package com.example.demo.admin.controller;
 import com.example.demo.admin.dto.AdminDto;
 import com.example.demo.admin.entity.Admin;
 import com.example.demo.admin.service.AdminService;
-import com.example.demo.admin.service.AnalyticsService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +20,6 @@ import java.util.List;
 @RequestMapping("/api")
 public class AdminController {
     private final AdminService adminService;
-    private final AnalyticsService analyticsService;
 
     @GetMapping
     public List<Admin> managers(){
@@ -52,28 +49,4 @@ public class AdminController {
         else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-
-//    @GetMapping("/admin/logout")
-//    public String logout(HttpSession session) {
-//        session.invalidate();
-//        return "logout";
-//    }
-
-    @GetMapping("/admin/dashboard")
-    public List<Long> getVisitor() throws GeneralSecurityException, IOException {
-        LocalDate today = LocalDate.now();
-        LocalDate lastWeek = today.minusWeeks(1);
-        List<Long> dates = new ArrayList<>();
-        for (LocalDate date = lastWeek; !date.isAfter(today.minusDays(1)); date = date.plusDays(1)) {
-            String startDate = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
-            String endDate = date.plusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
-            List<Long> temp = analyticsService.getVisitorCount(startDate, endDate);
-            if(!temp.isEmpty())
-                dates.add(temp.get(0));
-            else
-                dates.add(0L);
-        }
-        return dates;
-    }
-
 }
